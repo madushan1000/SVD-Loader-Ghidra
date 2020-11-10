@@ -70,15 +70,15 @@ cpu_endian = parser.get_device().cpu.endian
 default_register_size = parser.get_device().size
 
 # Not all SVDs contain these fields
-if cpu_type and not cpu_type.startswith("CM"):
-	print("Currently only Cortex-M CPUs are supported.")
-	print("Supplied CPU type was: " + cpu_type)
-	sys.exit(1)
+#if cpu_type and not cpu_type.startswith("CM"):
+#	print("Currently only Cortex-M CPUs are supported.")
+#	print("Supplied CPU type was: " + cpu_type)
+#	sys.exit(1)
 
-if cpu_endian and cpu_endian != "little":
-	print("Currently only little endian CPUs are supported.")
-	print("Supplied CPU endian was: " + cpu_endian)
-	sys.exit(1)
+#if cpu_endian and cpu_endian != "little":
+#	print("Currently only little endian CPUs are supported.")
+#	print("Supplied CPU endian was: " + cpu_endian)
+#	sys.exit(1)
 
 # Get things we need
 listing = currentProgram.getListing()	
@@ -161,12 +161,12 @@ for peripheral in peripherals:
 
 
 	dtm.addDataType(peripheral_struct, DataTypeConflictHandler.REPLACE_HANDLER)
+	try:
+		listing.createData(addr, peripheral_struct, False)
 
-	listing.createData(addr, peripheral_struct, False)
-
-	symtbl.createLabel(addr,
-					peripheral.name,
-					namespace,
-					SourceType.USER_DEFINED );
-	# except:
-	# 	print("\t\tFailed to generate peripheral " + peripheral.name)
+		symtbl.createLabel(addr,
+						peripheral.name,
+						namespace,
+						SourceType.USER_DEFINED );
+	except:
+		print("\t\tFailed to generate peripheral " + peripheral.name)
